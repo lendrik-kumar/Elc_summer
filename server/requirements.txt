@@ -1,0 +1,6 @@
+flask
+flask_sqlalchemy
+paho-mqtt
+flask-socketio
+psycopg2-binary
+sqlalchemy
