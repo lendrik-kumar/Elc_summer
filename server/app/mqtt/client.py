@@ -8,19 +8,19 @@ import os
 
 def start_mqtt(app):
     def on_connect(client, userdata, flags, rc, properties=None):
-        print("✅ MQTT Connected with result code:", rc)
+        print("MQTT Connected with result code:", rc)
         client.subscribe("esp32/sensors", qos=1)
 
     def on_publish(client, userdata, mid, properties=None):
-        print("📤 Message published. mid:", mid)
+        print("message published", mid)
 
     def on_subscribe(client, userdata, mid, granted_qos, properties=None):
-        print("🔗 Subscribed:", mid, granted_qos)
+        print("subscribed", mid, granted_qos)
 
     def on_message(client, userdata, msg):
         try:
             payload = json.loads(msg.payload.decode())
-            print("📥 Received:", payload)
+            print("received ", payload)
 
             with app.app_context():
                 data = SensorData(
@@ -31,10 +31,10 @@ def start_mqtt(app):
                 )
                 db.session.add(data)
                 db.session.commit()
-                print("✅ Data saved")
+                print("saved")
 
         except Exception as e:
-            print("❌ MQTT error:", e)
+            print("MQTT error", e)
 
     client = paho.Client(client_id="", userdata=None, protocol=paho.MQTTv5)
     client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
